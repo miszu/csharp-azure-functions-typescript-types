@@ -1,4 +1,5 @@
-# Generating TypeScript typings for C# Azure Functions (proof of concept)
+# Generating TypeScript typings for C# Azure Functions
+(proof of concept)
 
 ![Image](https://cdn-images-1.medium.com/max/800/1*Gb4HAzkufp6aDl85y4P9hw.jpeg)
 
