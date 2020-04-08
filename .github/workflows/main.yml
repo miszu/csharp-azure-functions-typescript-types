@@ -4,13 +4,13 @@ on:
   [push]
   
 env:
-  AZURE_FUNCTIONAPP_NAME: mediumfunctionapp                               # your application's name in Azure
-  AZURE_FUNCTIONAPP_PACKAGE_PATH: '.'                                     # path to your web app project, defaults to the repository root
-  DOTNET_VERSION: '3.1.100'                                               # dotnet version to use
-  NPM_TOKEN: ${{ secrets.NPM_TOKEN }}                                     # dotnet version to use
-  SWAGGER_LINK: https://mediumfunctionapp.azurewebsites.net/api/swagger   # swagger document link (not UI)
-  TYPES_FILENAME: index.d.ts                                              # file with types
-  TYPES_FOLDER: /Types                                                    # subfolder for npm package generation
+  AZURE_FUNCTIONAPP_NAME: mediumfunctionapp                                    # your application's name in Azure
+  AZURE_FUNCTIONAPP_PACKAGE_PATH: '.'                                          # path to your web app project, defaults to the repository root
+  DOTNET_VERSION: '3.1.100'                                                    # dotnet version to use
+  NPM_TOKEN: ${{ secrets.NPM_TOKEN }}                                          # dotnet version to use
+  SWAGGER_LINK: https://mediumfunctionapp.azurewebsites.net/api/swagger/json   # swagger document link (not UI)
+  TYPES_FILENAME: index.d.ts                                                   # file with types
+  TYPES_FOLDER: /Types                                                         # subfolder for npm package generation
 
 jobs:
   release:
