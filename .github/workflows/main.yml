@@ -10,7 +10,7 @@ env:
   NPM_TOKEN: ${{ secrets.NPM_TOKEN }}                                          # dotnet version to use
   SWAGGER_LINK: https://mediumfunctionapp.azurewebsites.net/api/swagger/json   # swagger document link (not UI)
   TYPES_FILENAME: index.d.ts                                                   # file with types
-  TYPES_FOLDER: /Types                                                         # subfolder for npm package generation
+  TYPES_FOLDER: ./Types                                                         # subfolder for npm package generation
 
 jobs:
   release:
