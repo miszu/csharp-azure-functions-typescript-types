@@ -1,6 +1,6 @@
 ﻿using System.ComponentModel.DataAnnotations;
+using System.Linq;
 using System.Net;
-using System.Threading.Tasks;
 using Microsoft.AspNetCore.Http;
 using Microsoft.Azure.WebJobs;
 using Microsoft.Azure.WebJobs.Extensions.Http;
@@ -13,18 +13,26 @@ namespace DummyFunctionApp.DummyFunction
     {
         [FunctionName("DummyFunction")]
         [ProducesResponseType((int)HttpStatusCode.OK, Type = typeof(DummyResponseDto))]
-        public async Task<IActionResult> Run([HttpTrigger(AuthorizationLevel.Admin, "get", Route = "dummyFunction")] HttpRequest req, ILogger log)
+        public IActionResult Run([HttpTrigger(AuthorizationLevel.Admin, "get", Route = "dummyFunction")] HttpRequest req, ILogger log)
         {
-            return new OkObjectResult("hey!");
+            return new ObjectResult(new DummyResponseDto
+            {
+                Greeting = "Hey!",
+                Emoji = "👷🏻‍",
+                NestedThingies = Enumerable.Range(0, 5).Select(x => new DummyNestedDto
+                {
+                    ImportantNumber = x
+                }).ToArray()
+            });
         }
     }
 
     public class DummyResponseDto
     {
-        public string Text { get; set; }
+        public string Emoji { get; set; }
         
         [Required]
-        public string RequiredText { get; set; }
+        public string Greeting { get; set; }
         
         public DummyNestedDto[] NestedThingies { get; set; }
     }

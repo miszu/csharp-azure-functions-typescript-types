@@ -1,0 +1,8 @@
+{
+  "name": "azure-functions-sample-types",
+  "author": "Michał Żołnieruk",
+  "version": "0.0.0-dev",
+  "dependencies": {
+    "typescript": "~3.7.2"
+  }
+}
