@@ -1,2 +1,8 @@
-# csharp-azure-functions-typescript-types
- This is proof of concept of generating typescript types (and publishing them to npm) for C# Azure Functions
+# csharp-azure-functions-typescript-
+
+ This is proof of concept of generating TypeScript typings for C# Azure Functions
+
+![Image](https://cdn-images-1.medium.com/max/800/1*Gb4HAzkufp6aDl85y4P9hw.jpeg)
+
+Check out the article on Medium for more detailed explanation:
+https://medium.com/@miszu/generating-typescript-typings-for-your-c-azure-functions-f6daa823c72b
