@@ -1,0 +1,67 @@
+name: Deploy Azure functions & release types to npm
+
+on:
+  [push]
+  
+env:
+  AZURE_FUNCTIONAPP_NAME: mediumfunctionapp                               # your application's name in Azure
+  AZURE_FUNCTIONAPP_PACKAGE_PATH: '.'                                     # path to your web app project, defaults to the repository root
+  DOTNET_VERSION: '3.1.100'                                               # dotnet version to use
+  NPM_TOKEN: ${{ secrets.NPM_TOKEN }}                                     # dotnet version to use
+  SWAGGER_LINK: https://mediumfunctionapp.azurewebsites.net/api/swagger   # swagger document link (not UI)
+  TYPES_FILENAME: index.d.ts                                              # file with types
+  TYPES_FOLDER: /Types                                                    # subfolder for npm package generation
+
+jobs:
+  release:
+   name: release
+   runs-on: ubuntu-18.04
+   steps:
+   - uses: actions/checkout@v2
+   - name: Setup DotNet ${{ env.DOTNET_VERSION }} Environment
+     uses: actions/setup-dotnet@v1
+     with:
+      dotnet-version: ${{ env.DOTNET_VERSION }}
+
+   - name: 'Resolve Project Dependencies Using Dotnet'
+     shell: pwsh
+     run: |
+        pushd './${{ env.AZURE_FUNCTIONAPP_PACKAGE_PATH }}'
+        dotnet build --configuration Release --output ./output
+        popd
+        
+   - name: 'Run Azure Functions deploy'
+     uses: Azure/functions-action@v1
+     id: fa
+     with:
+       app-name: ${{ env.AZURE_FUNCTIONAPP_NAME }}
+       package: '${{ env.AZURE_FUNCTIONAPP_PACKAGE_PATH }}/output'
+       publish-profile: ${{ secrets.AZURE_FUNCTIONAPP_PUBLISH_PROFILE }}
+
+   - name: Get package to generate types
+     run: npm i swagger-typescript-api
+
+   - name: Wait to make sure new functions are up
+     uses: jakejarvis/wait-action@v0.1.0
+     with:
+        time: '30s'
+
+   - name: Generate types
+     run: npx swagger-typescript-api -p ${{ env.SWAGGER_LINK }} -o ./ -n ${{ env.TYPES_FILENAME }}
+     working-directory: ${{ env.TYPES_FOLDER }}
+       
+   - name: Setup Node.js
+     uses: actions/setup-node@v1
+     with:
+        node-version: 12
+        
+   - name: Install type package dependencies
+     run: npm ci
+     working-directory: ${{ env.TYPES_FOLDER }}
+
+   - name: Publish package with types
+     env:
+        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }} 
+        NPM_TOKEN: ${{ secrets.NPM_TOKEN }}
+     run: npx semantic-release
+     working-directory: ${{ env.TYPES_FOLDER }}
